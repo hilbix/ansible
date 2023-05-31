@@ -1,0 +1,49 @@
+---
+- hosts: all
+  gather_facts: false
+  become: yes
+ 
+  tasks:
+
+    - name: update everything
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install vim and others
+      apt:
+        name:
+          - etckeeper
+          - vim
+          - vim-scripts
+          - python3
+          - build-essential
+          - gawk
+          - psmisc
+        state: latest
+
+    - name: Make vim the default editor
+      apt:
+        name: nano
+        state: absent
+
+    - name: Properly configure /etc/ssh
+      register: sshd_conf_d
+      copy:
+        backup: yes
+        dest: /etc/ssh/sshd_config.d/bootstrap.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          UseDNS no
+          PubkeyAuthentication yes
+          PasswordAuthentication no
+          ChallengeResponseAuthentication no
+
+    - name: Restart SSH if needed
+      service:
+        name: sshd
+        state: restarted
+      when: sshd_conf_d.changed
+
