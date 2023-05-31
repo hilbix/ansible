@@ -25,8 +25,9 @@ Setup and manage remote VMs with Ansible.
 > Everything else should then be scriptable.
 
 
-This README is a bit Debian centric.  But only very basic Debianisms are used,
-like `apt`.  So fo other Distributions, adapt accordingly.  Thanks.
+This all is a bit Debian centric for now.
+But only very basic Debianisms are used, like `apt`.
+So fo other Distributions, adapt accordingly.  Thanks.
 
 
 ## Requirements
