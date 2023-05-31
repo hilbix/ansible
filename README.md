@@ -1,21 +1,17 @@
-> This is W.i.p. and will evolve over time.
+> This repo is WIP and it is not stable, so expect breaking changes.
 >
-> Currently this repo is not ready to be used by you.  But I am working on it.
-> But this is for me, not for you, so I possibly will change things radically,
-> incompatibly to changes/playbooks/ideas you might have applied.
-> Besides of this it should give you a quick headstart, something I did not have.
+> Anyway, it might give you a headstart if you want to start using
+> Ansible on some remote host the standalone way.
 >
-> Note that I am also learning how to adapt Ansible for my infrastructure,
+> Note that I am also learning how to adapt Ansible to my infrastructure,
 > so bear with me that I probably only use very low level Ansible features,
-> and often will apply some external script magic instead of existing
-> Ansible features.  (Playbooks have a too complex basic design for my taste.)
+> and often will apply some external script magic instead of using the proper
+> Ansible feature.  (Playbooks have a too complex basic design for my taste.)
 >
-> So all this does here is to use basic Ansible as the management driver,
-> perhaps it will later be changed to fit into some Semaphore infrastructure.
->
-> Currently this is not the supported, as the branch management is incompatible
-> to Semaphore.  Note that it will stay this way, Semaphore integration will
-> be implemented a different way.
+> So all this here offers is, to use basic Ansible as the management driver.
+> Perhaps later it will fit into some Semaphore infrastructure.  Or not.
+> Currently the branch management is incompatible with Semaphore, and it is
+> unlikely to change.  Perhaps some converter will be available in future.
 
 
 # Ansible
@@ -40,13 +36,13 @@ In contrast what you find elsewhere, the requirements to use this here are prett
   - `git`: know how to use this `git` feature: `git config --global url.XXXX.insteadOf YYYY`
   - `ssh`: How to configure `~/.ssh/config` to tunnel to some VM using `ProxyCommand`
 - Some local Linux
-  - With this repository here installed
-  - A local ansible is installed, but it need not be a current version
-  - WSL under Windows works, of course
+  - Can be WSL under Windows, of course
+  - Needs this repository here installed
+  - Needs a local ansible installed, but this need not be a current one
 - Some remote VM which is up an running
   - With some minimum default install
   - No additional setup needed, except `ssh`
-  - No need to access the VM host (cloud VM is ok)
+  - No need to access the VM host, just the VM is enough
 - `ssh` access to the VM
   - Name of the `ssh` connection should match `hostname -f` on the VM
   - Pubkey auth recommended, but SSH login with password is ok
@@ -69,14 +65,18 @@ This is only needed once:
 	git clone https://github.com/hilbix/ansible.git
 	cd ansible
 
-For all `local` things, use a shell with this directory as current one.
-All `remote` things usually run out of the home of the unprivileged user.
+From here, all `Local:` shell commands run from this directory.
+All `Remote:` things run out of the home of the unprivileged user.
+(If you change paths, you need to adopt accordingly.)
 
 Local: Then you probably want to do this, to be able to push your work back to your local `git` server:
 
 	git remote rename origin upstream
 	git remote add origin git@gitserver.local:ansible/ansible.git
 	git push --mirror origin
+
+> I recommend to have remotes upstream and origin,
+> as host configuration usually do not need to be pushed to upstream.
 
 
 ## Prepare VM init
@@ -175,14 +175,14 @@ This does following:
 
 Remote: (Recommended)
 
-	./run.sh
+	git/ansible/run.sh
 
 Be sure to have all your branches updated properly and checked out the latest current version of your Playbooks,
 not only on `master` but on your `host/` submodule, too.  For this you need to know how to use `git`.
 
 There is a helper command which could update things on the remote:
 
-	./update.sh
+	git/ansible/update.sh
 
 However this may fail if things start to become too complex.
 
