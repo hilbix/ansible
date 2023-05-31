@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: true
+  become_method: su
+  gather_facts: false
+  
+  tasks:
+
+    - name: Get the nonprivileged user for sudo
+      become: false
+      shell: id -nu
+      register: id_nu
+
+    - set_fact: unprivileged_user={{ id_nu.stdout }}
+
+    - name: First thing to do is to install etckeeper
+      become: true
+      raw: apt install -y etckeeper
+
+    - name: Then install sudo
+      become: true
+      raw: apt install -y sudo
+
+    - name: Allow current user to sudo
+      become: true
+      lineinfile:
+        path: /etc/sudoers.d/{{ unprivileged_user }}
+        line: '{{ unprivileged_user }} ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        mode: 0440
+        create: yes
+        validate: '/usr/sbin/visudo -cf %s'
+
+    - name: As our local Ansible might be too old, install a current one
+      become: true
+      raw: apt install -y ansible
+
+    - name: Success
+      pause:
+        seconds: 1
+        echo: false
+        prompt: |
+          Minimal setup complete for {{ unprivileged_user }}
+          [OK]
+
