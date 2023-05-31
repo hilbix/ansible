@@ -100,3 +100,5 @@ EOF
   o git add "$BRANCH"
 fi
 
+exec ./push.sh "$DEST"
+
