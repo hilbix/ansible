@@ -25,6 +25,10 @@ Setup and manage remote VMs with Ansible.
 > Everything else should then be scriptable.
 
 
+This README is a bit Debian centric.  But only very basic Debianisms are used,
+like `apt`.  So fo other Distributions, adapt accordingly.  Thanks.
+
+
 ## Requirements
 
 In contrast what you find elsewhere, the requirements to use this here are pretty low:
@@ -133,7 +137,7 @@ Follow instructions.
 ## Manage the Playbooks for the VM
 
 The individual Playbooks for the VM are kept in a `git` branch,
-prefixed with `ansible/` and named after the VM,
+prefixed with `host/` and named after the VM,
 here `host/vm1.example.net`.
 
 `init.sh` initializes this branch if it is missing.
@@ -195,8 +199,8 @@ If it fails you need to escape by applying manual commands.
 
 Ansible and Semaphore already offer automation.  It looks a bit like I re-invent the wheel here.
 
-But this is wrong.  Ansible and Semaphore do not offer authenticated automation
-and needs some option, which simply do not exist:
+But this is wrong.  Ansible and Semaphore do not offer authenticated automation.
+Also I need some features, which simply do not exist.
 
 Considere a triple offline situation:
 
