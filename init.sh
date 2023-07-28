@@ -45,12 +45,12 @@ o ssh-copy-id "$DEST"
 
 # Setup sudo
 # Do it a way which also works for older local ansible variants
-x SSH "$DEST" 'sudo true' ||
+x SSH "$DEST" 'sudo -n true' ||
 {
 # Try to setup sudo via sudo
 x SSH "$DEST" 'which sudo' && x play init/sudo-sudo.yml -K
 # Setup sudo via su if previous failed
-x SSH "$DEST" 'sudo true'  || o play init/sudo-su.yml -K
+x SSH "$DEST" 'sudo -n true'  || o play init/sudo-su.yml -K
 }
 
 # Install ansible
