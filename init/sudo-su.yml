@@ -13,7 +13,7 @@
 
     - set_fact: unprivileged_user={{ id_nu.stdout }}
 
-    - name: First thing to do is to install etckeeper
+    - name: First thing always to do is to install etckeeper
       become: true
       raw: apt install -y etckeeper
 
@@ -30,10 +30,6 @@
         mode: 0440
         create: yes
         validate: '/usr/sbin/visudo -cf %s'
-
-    - name: As our local Ansible might be too old, install a current one
-      become: true
-      raw: apt install -y ansible
 
     - name: Success
       pause:
