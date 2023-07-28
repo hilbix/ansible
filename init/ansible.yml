@@ -4,6 +4,9 @@
   gather_facts: false
   
   tasks:
+    - name: First thing always to do is to install etckeeper
+      raw: apt install -y etckeeper
+
     - name: Ensure old python2 is no more present
       raw: apt purge -y python2
 
