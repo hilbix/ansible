@@ -66,6 +66,10 @@ o SSH "$DEST" 'cd "$1" && s="`git status --porcelain`" && [ -z "$s" ] && git che
 # and setup all the standard packages
 o SSH "$DEST" 'ansible-playbook -i "$1"/inventory/localhost "$1"/init/init.yml' "$TARGET"
 
+# THE FOLLOWING WAS A MISCONCEPTION
+# Was it?
+nope()
+{
 # Now create the local host branch if missing
 ov fqdn SSH "$DEST" 'hostname -f'
 
@@ -107,4 +111,5 @@ EOF
 fi
 
 exec ./push.sh "$DEST"
+}
 
