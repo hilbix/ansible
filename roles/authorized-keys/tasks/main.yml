@@ -1,0 +1,7 @@
+
+- name: Update authorized_keys
+  ansible.posix.authorized_keys:
+    user: "{{ user }}"
+    key: "files/authorized_keys/{{ item }}"
+  loop: "{{ keys }}"
+
