@@ -1,7 +1,35 @@
 
-- name: Update authorized_keys
-  ansible.posix.authorized_keys:
-    user: "{{ user }}"
-    key: "files/authorized_keys/{{ item }}"
-  loop: "{{ keys }}"
+# Iteration 0 #
+#
+#- name: gather authorized_keys_files from keys being a single value
+#  set_fact:
+#    authorized_keys_files: ["{{ keys }}"]
+#  when: keys is string
+#
+#- name: gather authorized_keys_files from keys being a list
+#  set_fact:
+#    authorized_keys_files: "{{ keys }}"
+#  when: keys is not string
+#
+#- name: Update authorized_keys from keys
+#  ansible.posix.authorized_key:
+#    user: "{{ user }}"
+#    key: "{{ lookup('file', 'files/authorized_keys/{{ item }}') }}"
+#  loop: "{{ authorized_keys_files }}"
+#
+# Iteration 1 #
+#
+#- name: Update authorized_keys from keys
+#  ansible.posix.authorized_key:
+#    user: "{{ user }}"
+#    key: "{{ lookup('file', 'files/authorized_keys/{{ item }}') }}"
+#  loop: "{{ keys is string | ternary([keys], keys) }}"
+#
+# Iteration 2 #
+
+- name: Update authorized_keys from keys
+  ansible.posix.authorized_key:
+    user: "{{ item.0 }}"
+    key: "{{ lookup('file', 'files/authorized_keys/{{ item.1 }}') }}"
+  loop: "{{ (users is string | ansible.builtin.ternary([users], users)) | ansible.builtin.product( (keys is string | ansible.builtin.ternary([keys], keys)) ) | list }}"
 
