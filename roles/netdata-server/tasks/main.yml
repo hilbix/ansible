@@ -1,0 +1,19 @@
+
+- name: Install netdata
+  ansible.builtin.apt:
+    name:
+      - netdata
+    state: latest
+
+- name: install server config
+  ansible.builtin.template:
+    src: templates/netdata-server/{{ item }}.conf
+    dest: /etc/netdata/
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - netdata
+    - stream
+    - exporting
+
