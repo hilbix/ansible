@@ -1,0 +1,7 @@
+
+- name: Install rrdcached
+  ansible.builtin.apt:
+    name:
+      - rrdcached
+    state: latest
+
