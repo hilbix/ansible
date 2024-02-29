@@ -16,4 +16,5 @@
     - netdata
     - stream
     - exporting
+  notify: Restart NetData
 
