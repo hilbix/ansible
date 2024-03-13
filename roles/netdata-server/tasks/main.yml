@@ -1,11 +1,5 @@
 
-- name: Install netdata
-  ansible.builtin.apt:
-    name:
-      - netdata
-    state: latest
-
-- name: install server config
+- name: Install NetData server config
   ansible.builtin.template:
     src: templates/netdata-server/{{ item }}.conf
     dest: /etc/netdata/
@@ -16,5 +10,5 @@
     - netdata
     - stream
     - exporting
-  notify: Restart NetData
+  notify: Restart netdata
 
