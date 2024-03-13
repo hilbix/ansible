@@ -1,0 +1,7 @@
+
+- name: Install chrony
+  ansible.builtin.apt:
+    name:
+      - chrony
+    state: latest
+
