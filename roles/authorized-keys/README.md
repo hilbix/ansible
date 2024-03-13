@@ -12,6 +12,11 @@ Install `~/.ssh/authorized_keys` from files in `files/authorized_keys/` via `ans
 - list of strings
 - `files/authorized_keys/{{key}}` source files with lines of ssh-entries
 
+`self` **(not yet implemented!)**
+- boolean
+- defaults to `true` if `users` is missing
+- adds the key into the matching user home `~{{key}}/.ssh/authorized_keys`
+
 Examples:
 
 ```
@@ -19,8 +24,48 @@ Examples:
     - role: authorized-keys
       users: alice
       keys: alice
+    - role: authorized-keys
+      users: bob
+      keys: bob
+```
+Following will do the same, but is not yet implemented.
+Note that `self` defaults to `true` in following case as `user` is not given:
+```
+  roles:
+    - role: authorized-keys
+      keys: alice
+      keys: bob
 ```
 
+```
+  roles:
+    - role: authorized-keys
+      users:
+        - root
+        - ftp
+      keys:
+        - alice
+        - bob
+    - role: authorized-keys
+      users: alice
+      keys: alice
+    - role: authorized-keys
+      users: bob
+      keys: bob
+```
+Following will do the same, but is not yet implemented:
+```
+  roles:
+    - role: authorized-keys
+      self: true
+      users:
+        - root
+        - ftp
+      keys:
+        - alice
+        - bob
+```
+Note that `self` defaults to `false` in that case:
 ```
   roles:
     - role: authorized-keys
@@ -43,4 +88,38 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCuy4uFe+slB8rI6pZuXoDuBQJWSTNEHbgl3GPY0VzJ
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF7qSEe6uYSrmw4jCZH506aWS96/HFlxsaZEpOsQ7zG7 bob@marley
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF+2WGPcoQs/erdoUw0UmyRkK0LoATFzC7D6ZwJyv7V5U2FlPqtg3KMkcM1KGM8ITqyBucG0jgJowLTz4xRI0A4/n1RyF1ebArLyH5MaeOqI54nYUg3ka6koavTfIcyc0EcWdQLqvJfb+EMxS2ic0EyFK8vFZfDtFCut/5paiEMZpefCqypbtzdppllVpB5ezIFqBbGXZPZUwp/ZglGQdgyh2TpJxIJUs/xStjeinqmmuu65bW+pJBZzEc9VRvlx06zoBHqiMcTp+1AkplxlkWPIWnloj0fwNLmFNaOkLFAVViH2O0/4ssSbsYr6J75duH3G5klPIPBhJebojWrFTH bob@marley
 ```
+
+## TODO
+
+- `self` is not yet implemented
+- `state: absent` is not yet implemented
+- `exclusive: true` is not yet implemented
+- `follow: true` is not yet implemented
+- `key_options` is not yet implemented
+  - This is the prefix of the ssh key
+  - Note that this can be implemented with the template files, too
+
+And additionally:
+
+- `template`
+  - Generate the files from a template instead
+- `metoo` boolean
+  - If set, the current running user's IDs are also added
+- `minetoo` boolean
+  - If set, the current running user's `autorized_keys` are added, too
+- `forward` for lists of ports allowed to forward to
+- `listen` for lists of ports allowed to listen to
+- `x11` if x11 forwarding allowed
+- `restrict` to enable `restrict`
+- and so on
+  - This also should work directly with some [`oath-auth`](https://github.com/hilbix/oath-auth) setup.
+
+I am undecided how to properly add following:
+
+- `comment`
+  - Perhaps interesting to add some comment when it was added or removed etc.
+- `path`
+  - Probably a directory prefix where then the files are put as `authorized_keys.user` or similar
+  - For SFTP the authorized-keys file can be put somewhere quite different
+  - Keeping the files somewhere else is mandatory to securely implement a shared SFTP space for multiple users
 
