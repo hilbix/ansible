@@ -1,7 +1,7 @@
 
 - name: Setup chrony VM serving time given by ProxMox
   ansible.builtin.template:
-    src: templates/chrony-server-proxmox.conf
+    src: chrony-server-proxmox.conf
     dest: /etc/chrony/chrony.conf
     owner: root
     group: root
