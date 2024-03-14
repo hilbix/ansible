@@ -1,3 +1,7 @@
+> WARNING!  
+> This is intermediate and may be in a wrong or not really working state.  
+> So far it only can be used as a reference.
+
 # roles
 
 These are my Ansible roles for all the standard things.
