@@ -13,6 +13,15 @@
 > Currently the branch management is incompatible with Semaphore, and it is
 > unlikely to change.  Perhaps some converter will be available in future.
 
+Note that I use this here plus <https://github.com/hilbix/bootp> to nearly automatically
+do the basic minimum install of VMs on ProxMox.
+
+From there on I use Ansible to do the setup.  But the latter is not ready to be published,
+I am afraid.  So you have to create your own things around this.
+
+> This is meant for VM setup.  Perhaps you can do bare metal setups with it, too,
+> but I do not thest this right now.
+
 
 # Ansible
 
