@@ -150,7 +150,10 @@ For more, please see [README](roles/) of this directory.
 
 # Below is NOT YET IMPLEMENTED
 
-And I doubt I will not follow this plan, because .. it is a bit complicated
+And I doubt I will follow this plan, because .. it is a bit complicated.
+
+So curently practice has changed from this at my side,
+and it is likely that the outcome will not match what you read in this section.
 
 
 ## Manage the Playbooks for the VM
