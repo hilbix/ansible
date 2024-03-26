@@ -135,7 +135,22 @@ Follow instructions.
   - If you cannot read or adapt Playbooks accordingly, this is not for you.  First learn Ansible instead.
 
 
+------------------------
+
+> Probably stop reading here
+
+------------------------
+
+# Below is NOT YET IMPLEMENTED
+
+And I doubt I will not follow this plan, because .. it is a bit complicated
+
+
 ## Manage the Playbooks for the VM
+
+> NOT YET IMPLEMENTED
+>
+> But I am not happy with this, so this probably will not become as written here!
 
 The individual Playbooks for the VM are kept in a `git` branch,
 prefixed with `host/` and named after the VM,
@@ -157,6 +172,10 @@ unconditionally with force.
 
 
 ## Update VM 
+
+> NOT YET IMPLEMENTED
+>
+> But I am not happy with this, so this probably will not become as written here!
 
 It is your responsibility to keep the worktree in sync with the `git` repository.
 
@@ -194,6 +213,11 @@ However this may fail if things start to become too complex.
 This not only pulls changes from the `git` server, it also pushes your changes.
 For safety, only fast-forward pull/push is supported.
 If it fails you need to escape by applying manual commands.
+
+
+# TL;DR
+
+Here is why I do this what I do here etc.
 
 
 ## Authenticated Automation
