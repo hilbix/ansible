@@ -1,0 +1,7 @@
+
+- name: Install roundcube
+  ansible.builtin.apt:
+    name:
+      - roundcube
+    state: latest
+
