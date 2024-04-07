@@ -22,4 +22,5 @@ Adds the docker-ce repositories and installs Docker CE.
   - for the Docker key ID
   - for the packages to install
 - Does not pull a changed Docker key from the web
-
+- Does not enforce `DOCKER_CONTENT_TRUST` yet
+- Does not disable `TOFU` yet
