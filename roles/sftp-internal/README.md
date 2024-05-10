@@ -1,4 +1,4 @@
-# `sftp-only`
+# `sftp-internal`
 
 Restrict users to `sftp-internal` of `sshd`.
 
