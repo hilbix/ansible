@@ -1,6 +1,8 @@
 > WARNING!  
 > This is intermediate and may be in a wrong or not really working state.  
 > So far it only can be used as a reference.
+>
+> See also [CONFUSED.md](CONFUSED.md) which I (should) softlink to roles as README which are not ready to be used.
 
 # roles
 
