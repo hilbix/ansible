@@ -1,0 +1,7 @@
+
+- name: "create .ssh/id_XXXX for {{ user }}"
+  include_tasks: ssh-id-user-key.yml
+  loop: "{{ keys is string | ansible.builtin.ternary([keys], keys) }}"
+  loop_control:                                                                                                                             
+    loop_var: key
+

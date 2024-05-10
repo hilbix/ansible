@@ -1,0 +1,12 @@
+
+- name: "create ~{{ user }}/.ssh/id_{{ key }}"
+  ansible.builtin.copy:
+    src: "files/ssh-id/{{ key }}{{ item.0 }}"
+    dest: "~/.ssh/id_{{ key }}{{ item.2 }}"
+    owner: "{{ user }}"
+    mode: "{{ item.1 }}"
+  become: true
+  become_user: "{{ user }}"
+  loop:
+    - [ .key, '0600', '' ]
+    - [ .pub, '0644', .pub ]

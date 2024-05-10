@@ -1,0 +1,7 @@
+
+- name: Update .ssh/id_XXX
+  include_tasks: ssh-id-user.yml
+  loop: "{{ users is string | ternary([users], users | default([lookup('env', 'USER')])) }}"
+  loop_control:
+    loop_var: user
+
