@@ -27,8 +27,8 @@ Examples:
     - role: ssh-id
       users:
         - root
-	- alice
-	- bob
+        - alice
+        - bob
       keys:
         - service1
         - service2
