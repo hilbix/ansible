@@ -21,6 +21,20 @@ key:
 ```
   roles:
     - role: hilbix-fix
-      key: service1
+```
+
+With a special service key:
+
+```
+  roles:
+  - role: ssh-id
+    keys: service1
+
+  tasks:
+    - name: roles
+      ansible.builtin.include_role:
+        name: hilbix-fix
+      vars:
+        key: service1
 ```
 
