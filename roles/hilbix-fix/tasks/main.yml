@@ -16,7 +16,7 @@
     version: 10585af6b9e2cd1d21be7d3b04784c128cd710bc
     refspec: refs/heads/master
     depth: 10
-#    ssh_opts: -v
+    ssh_opts: "{{ '-i ~/.ssh/id_'+key if key is defined else '' }}"
   register: hilbix_fix
 
 - name: update everything
