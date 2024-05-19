@@ -9,13 +9,17 @@
 
 `type`: (not yet implemented)
 
-- `client` transmits data to relay, cache or server, keeps nothing in memory
-- `relay`  receives data and transmits to nodes or endpoint, keeps data in memory
-- `cache`  receives data and transmits to server, caches data on disk between restarts, may run its own `rrdcached`
+- `client` transmits data to relay, cache or server, keeps nothing on disk or in memory
+- `relay`  receives data and transmits to `cache` or `server`, keeps data only in memory
+- `cache`  receives data and transmits to `server`, caches data on disk between restarts, may run its own `rrdcached`
 - `server` receives data, stores data on disk between restarts, runs `rrdcached`
+
+`client`: (not yet implemented)
+- default type if `server` variable is set
 
 `server`: (not yet implemented)
 
+- default type if local IP matches `netdata-server`
 - fact: `netdata-server`
 - The IP of the server
   - `IPv4:port`
@@ -23,14 +27,17 @@
 
 `cache`: (not yet implemented)
 
+- default type if local IP matches `netdata-cache`
 - fact: `netdata-cache`
+- The IP of the `cache`, see `server` above
 - Same as `server`
 - Used on `client` and `relay` types instead of `server`
 
 `relay`: (not yet implemented)
 
+- default type if local IP matches `netdata-relay`
 - fact: `netdata-relay`
-- Same as `server`
+- The IP of the `relay`, see `server` above
 - Used on `client` types instead of `cache` or `server`
 
 
@@ -58,7 +65,7 @@ This does not support NetData cloud, because this is meant for offline cluster s
 # Missing
 
 - `type` not yet implemented.
-  - For now please use roles `netdata-client` and `netdata-server` instead
+  - For now please use role `netdata-server` for server instead
 - `apikey`
   - it is `00000000-0000-0000-0000-000000000000` for now
 - `port`
