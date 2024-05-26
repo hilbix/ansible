@@ -5,17 +5,14 @@ Install `~/.ssh/authorized_keys` from files in `files/authorized_keys/` via `ans
 `users`
 - string
 - list of strings
+- defaults to current user if `users` is missing
 - `~{{user}}/.ssh/autorized_keys` destination to manipulate
 
 `keys`
 - string
 - list of strings
 - `files/authorized_keys/{{key}}` source files with lines of ssh-entries
-
-`self` **(not yet implemented!)**
-- boolean
-- defaults to `true` if `users` is missing
-- adds the key into the matching user home `~{{key}}/.ssh/authorized_keys`
+- not implemented: defaults to current user if `keys` is missing
 
 Examples:
 
@@ -28,8 +25,9 @@ Examples:
       users: bob
       keys: bob
 ```
-Following will do the same, but is not yet implemented.
-Note that `self` defaults to `true` in following case as `user` is not given:
+
+Following adds keys of `alice` and `bob` to the current user:
+
 ```
   roles:
     - role: authorized-keys
@@ -52,29 +50,6 @@ Note that `self` defaults to `true` in following case as `user` is not given:
     - role: authorized-keys
       users: bob
       keys: bob
-```
-Following will do the same, but is not yet implemented:
-```
-  roles:
-    - role: authorized-keys
-      self: true
-      users:
-        - root
-        - ftp
-      keys:
-        - alice
-        - bob
-```
-Note that `self` defaults to `false` in that case:
-```
-  roles:
-    - role: authorized-keys
-      users:
-        - root
-        - ftp
-      keys:
-        - alice
-        - bob
 ```
 
 `files/authorized_keys/alice`:
@@ -91,7 +66,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF+2WGPcoQs/erdoUw0UmyRkK0LoATFzC7D6ZwJyv7
 
 ## TODO
 
-- `self` is not yet implemented
+- `keys` default is not yet implemented
 - `state: absent` is not yet implemented
 - `exclusive: true` is not yet implemented
 - `follow: true` is not yet implemented
