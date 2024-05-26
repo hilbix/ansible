@@ -1,5 +1,12 @@
 
-- name: "create .ssh/id_XXXX for {{ user }}"
+- name: "ensure directory ~{{ user }}/.ssh/{{dir | default('.') }} exists"
+  ansible.builtin.file:
+    path: "~/.ssh/{{ dir }}"
+    state: directory
+  become: true
+  become_user: "{{ user }}"
+
+- name: "create identities in .ssh/{{ dir | default('.') }}/ for {{ user }}"
   include_tasks: ssh-id-user-key.yml
   loop: "{{ keys is string | ansible.builtin.ternary([keys], keys) }}"
   loop_control:                                                                                                                             
