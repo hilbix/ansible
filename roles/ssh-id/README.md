@@ -1,6 +1,6 @@
 # `ssh-id`
 
-Install `~/.ssh/id_xxxx` from files `files/ssh-id/xxxx.key` and `files/ssh-id/xxxx.pub`
+Install files `files/ssh-id/xxxx/*.key` and `files/ssh-id/xxxx/*.pub` to `~/.ssh/`
 
 `keys`
 - string
@@ -11,8 +11,12 @@ Install `~/.ssh/id_xxxx` from files `files/ssh-id/xxxx.key` and `files/ssh-id/xx
 - list of strings
 - defaults to the current user of the play
 
-- `files/ssh-id/{{key}}.key` source file for `.ssh/id_{{key}}`
-- `files/ssh-id/{{key}}.pub` source file for `.ssh/id_{{key}}.pub`
+`dir`
+- string
+- defaults to .
+
+- `files/ssh-id/{{key}/name.key` source file for `.ssh/{{dir}}/name`
+- `files/ssh-id/{{key}/name.pub` source file for `.ssh/{{dir}}/name.pub`
 
 Examples:
 
