@@ -31,5 +31,5 @@
   ansible.posix.authorized_key:
     user: "{{ item.0 }}"
     key: "{{ lookup('file', 'files/authorized_keys/{{ item.1 }}') }}"
-  loop: "{{ (users is string | ansible.builtin.ternary([users], users)) | ansible.builtin.product( (keys is string | ansible.builtin.ternary([keys], keys)) ) | list }}"
+  loop: "{{ (users is string | ansible.builtin.ternary([users], users | default([lookup('env', 'USER')]))) | ansible.builtin.product( (keys is string | ansible.builtin.ternary([keys], keys)) ) | list }}"
 
