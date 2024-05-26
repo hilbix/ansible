@@ -1,12 +1,9 @@
+# No filter named 'ansible.builtin.split, hence we do not do it here
+# hence use regex_replace('^(.*)\.[^.]*$','\\1') instead
 
-- name: "create ~{{ user }}/.ssh/id_{{ key }}"
-  ansible.builtin.copy:
-    src: "files/ssh-id/{{ key }}{{ item.0 }}"
-    dest: "~/.ssh/id_{{ key }}{{ item.2 }}"
-    owner: "{{ user }}"
-    mode: "{{ item.1 }}"
-  become: true
-  become_user: "{{ user }}"
-  loop:
-    - [ .key, '0600', '' ]
-    - [ .pub, '0644', .pub ]
+- name: "create ~{{ user }}/.ssh/{{ dir | default('.') }}/id_ identities from files/ssh-id/{{ key }}/"
+  include_tasks: ssh-id-user-key-file.yml
+  loop: "{{ query('ansible.builtin.fileglob', 'files/ssh-id/{{ key }}/*.key') | map('ansible.builtin.basename') | map('ansible.builtin.regex_replace', '^(.*)\\.[^.]*$','\\1') }}"
+  loop_control:
+    loop_var: name
+
