@@ -1,0 +1,30 @@
+
+----
+
+- name: "install src/"
+  ansible.builtin.git:
+    repo: https://github.com/hilbix/src.git
+    dest: src
+    ssh_opts: "-o StrictHostKeyChecking=accept-new"
+    version: 15293a58a46b0600f63fc678d0fb149210f2c1ea
+    refspec: refs/heads/master
+
+- name: "TEMP: install standard .gitconfig"
+  ansible.builtin.copy:
+    src: files/gitconfig
+    dest: .gitconfig
+    force: false
+  notify: Make gitstart
+
+- name: "TEMP: install extra packages"
+  ansible.builtin.apt:
+    name:
+      - git
+      - build-essential
+      - tmux
+  become: yes
+
+- name: "TEMP: install fixes"
+  ansible.builtin.import_role:
+    name: hilbig-fix
+
