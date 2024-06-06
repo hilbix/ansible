@@ -1,0 +1,7 @@
+
+----
+
+- name: Make gitstart
+  ansible.builtin.shell:
+    cmd: make -C src/gitstart
+
