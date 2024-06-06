@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: "0644"
-  when: apt_proxy is defined
+  when: apt_proxy is defined and lookup('env', 'USER') == 'root'
 
 - name: download https://github.com/hilbix/fix.git to /root/git/fix/.git
   ansible.builtin.git:
@@ -19,28 +19,27 @@
     ssh_opts: "{{ '-i ~/.ssh/id_'+key if key is defined else '' }}"
   register: hilbix_fix
 
+- name: install git/fix/
+  ansible.builtin.command:
+    chdir: git/fix/
+    cmd: make
+  when: hilbix_fix.changed
+
 - name: update everything
   ansible.builtin.apt:
     update_cache: yes
     upgrade: dist
-  when: hilbix_fix.changed
+  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
 
 - name: Install debian-security-support
   ansible.builtin.apt:
     name:
       - debian-security-support
     state: latest
-  when: hilbix_fix.changed
-
-- name: install /root/git/fix/
-  ansible.builtin.command:
-    chdir: /root/git/fix/
-    cmd: make
-  when: hilbix_fix.changed
+  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
 
 - name: run /root/.apt the first time
   ansible.builtin.command:
-    chdir: /root/git/fix/
-    cmd: make
-  when: hilbix_fix.changed
+    cmd: DEBIAN_FRONTEND=noninteractive ./.apt
+  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
 
