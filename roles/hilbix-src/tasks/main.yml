@@ -1,5 +1,5 @@
 
-----
+---
 
 - name: "install src/"
   ansible.builtin.git:
