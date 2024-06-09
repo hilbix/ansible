@@ -1,45 +1,37 @@
 
-- name: Apply apt proxy settings if defined
-  ansible.builtin.template:
-    src: 99proxy
-    dest: /etc/apt/apt.conf.d/99proxy
-    owner: root
-    group: root
-    mode: "0644"
-  when: apt_proxy is defined and lookup('env', 'USER') == 'root'
+# Sorry, I did not find any Ansible variable
+# which allows me to reliably detect if we
+# became root.
 
-- name: download https://github.com/hilbix/fix.git to /root/git/fix/.git
+- name: get UID
+  ansible.builtin.shell:
+    cmd: id -u
+  register: userid
+
+- name: get HOME
+  ansible.builtin.shell:
+    cmd: 'getent passwd {{ userid.stdout }} | cut -d: -f6'
+  register: userhome
+
+- name: "download https://github.com/hilbix/fix.git to {{ userhome.stdout }}/git/fix/"
   ansible.builtin.git:
     repo: https://github.com/hilbix/fix.git
-    dest: /root/git/fix
+    dest: '{{ userhome.stdout }}/git/fix'
     accept_hostkey: yes
-    version: daa504d667b4a92a57318e5f3bf0b8bc8c945d2d
+    version: f9ee3b32631c779ff7f2fd9f6e4ae3170ca6286a
     refspec: refs/heads/master
     depth: 10
     ssh_opts: "{{ '-i ~/.ssh/id_'+key if key is defined else '' }}"
+  become: true
   register: hilbix_fix
 
 - name: install git/fix/
   ansible.builtin.command:
-    chdir: git/fix/
+    chdir: '{{ userhome.stdout }}/git/fix/'
     cmd: make
   when: hilbix_fix.changed
 
-- name: update everything
-  ansible.builtin.apt:
-    update_cache: yes
-    upgrade: dist
-  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
-
-- name: Install debian-security-support
-  ansible.builtin.apt:
-    name:
-      - debian-security-support
-    state: latest
-  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
-
-- name: run /root/.apt the first time
-  ansible.builtin.command:
-    cmd: DEBIAN_FRONTEND=noninteractive ./.apt
-  when: hilbix_fix.changed and lookup('env', 'USER') == 'root'
+- name: root only hacks
+  ansible.builtin.include_tasks: hilbix-fix-root.yml
+  when: userid.stdout == "0"
 
