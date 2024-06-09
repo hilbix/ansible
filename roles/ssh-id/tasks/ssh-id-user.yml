@@ -1,5 +1,5 @@
 
-- name: "ensure directory ~{{ user }}/.ssh/{{dir | default('.') }} exists"
+- name: "ensure directory ~{{ user }}/.ssh/{{ dir | default('.') }} exists"
   ansible.builtin.file:
     path: "~/.ssh/{{ dir }}"
     state: directory
