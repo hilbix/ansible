@@ -11,9 +11,9 @@
     name: docker
   notify: Restart docker
   become: yes
+
 - name: allow user to run docker
   ansible.builtin.user:
-    user: tino
     groups: docker
   become: yes
 
