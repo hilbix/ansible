@@ -4,9 +4,11 @@
     name:
       - nginx
     state: latest
+  become: true
 
 - name: Remove default site
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
+  become: true
 
