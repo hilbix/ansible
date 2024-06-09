@@ -1,0 +1,7 @@
+
+- name: Install apt-file
+  ansible.builtin.apt:
+    name:
+      - apt-file
+    state: latest
+
