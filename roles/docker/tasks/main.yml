@@ -1,6 +1,4 @@
 
----
-
 - name: install docker base
   ansible.builtin.apt:
     name:
