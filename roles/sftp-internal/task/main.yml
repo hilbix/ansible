@@ -1,4 +1,3 @@
----
 
 - name: create /etc/ssh/sshd_config.end
   ansible.builtin.file:
