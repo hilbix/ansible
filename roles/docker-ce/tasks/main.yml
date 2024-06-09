@@ -1,6 +1,4 @@
 
----
-
 - name: make sure gpg is installed
   ansible.builtin.apt:
     name: gpg
