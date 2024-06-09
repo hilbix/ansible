@@ -1,0 +1,5 @@
+
+- name: Update apt-file
+  ansible.builtin.shell:
+    cmd: apt-file update
+
