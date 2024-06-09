@@ -1,0 +1,28 @@
+
+- name: Apply apt proxy settings if defined
+  ansible.builtin.template:
+    src: 99proxy
+    dest: /etc/apt/apt.conf.d/99proxy
+    owner: root
+    group: root
+    mode: "0644"
+  when: apt_proxy is defined
+
+- name: update everything
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+  when: hilbix_fix.changed
+
+- name: Install debian-security-support
+  ansible.builtin.apt:
+    name:
+      - debian-security-support
+    state: latest
+  when: hilbix_fix.changed
+
+- name: run {{ userhome.stdout }}/.apt the first time
+  ansible.builtin.command:
+    cmd: "DEBIAN_FRONTEND=noninteractive '{{ userhome.stdout }}/.apt'"
+  when: hilbix_fix.changed
+
