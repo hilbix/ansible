@@ -1,4 +1,3 @@
----
 
 - hosts: ftp
   become: yes
