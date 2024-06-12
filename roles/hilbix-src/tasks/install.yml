@@ -1,0 +1,14 @@
+
+- ansible.builtin.stat:
+    path: /usr/local/bin/{{ prog }}
+  register: item_stat
+
+- ansible.builtin.shell:
+    cmd: make -C src/{{ prog }}/
+  when: not item_stat.stat.exists
+
+- ansible.builtin.shell:
+    cmd: make -C src/{{ prog }}/ install
+  become: true
+  when: not item_stat.stat.exists
+
