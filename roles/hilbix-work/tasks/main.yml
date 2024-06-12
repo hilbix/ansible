@@ -51,13 +51,8 @@
 - ansible.builtin.import_role:
     name: apt-file
 
-- name: install src/
-  ansible.builtin.git:
-    repo: https://github.com/hilbix/src.git
-    dest: src
-    ssh_opts: "-o StrictHostKeyChecking=accept-new"
-    version: 15293a58a46b0600f63fc678d0fb149210f2c1ea
-    refspec: refs/heads/master
+- ansible.builtin.import_role:
+    name: hilbix-src
 
 - name: install standard .gitconfig
   ansible.builtin.copy:
@@ -69,4 +64,22 @@
 - name: install fixes
   ansible.builtin.import_role:
     name: hilbix-fix
+
+- name: install tools
+  ansible.builtin.include_role:
+    name: hilbix-src
+    tasks_from: install
+  vars:
+    prog: "{{ item }}"
+  loop:
+    - count
+    - dirlist
+    - diskus
+    - md5chk
+    - mvatom
+    - passfd
+    - ptybuffer
+    - socklinger
+    - suid
+    - unbuffered
 
