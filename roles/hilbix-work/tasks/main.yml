@@ -13,6 +13,8 @@
       - vim
       - vim-scripts
       - ethtool
+      - net-tools
+      - whois
       - jq
       - bash-completion
       - gawk
@@ -41,7 +43,6 @@
       - p7zip
       - vnstat
       - wdiff
-      - whois
       - zip
       - zstd
     state: latest
