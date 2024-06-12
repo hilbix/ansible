@@ -30,6 +30,6 @@
 - name: 'clone https://github.com/{{ from }}/{{ repo | default(key) }}.git'
   ansible.builtin.git:
     repo: '{{ key is defined | ternary("github.com+"+from+"+"+(repo | default(key))+":", "https://github.com/") }}/{{ from }}/{{ repo | default(key) }}.git'
-    dest: '{{ dest | default(repo) }}'
+    dest: '{{ dest | default(repo | default(key)) }}'
     depth: '{{ depth | default(0) }}'
 
