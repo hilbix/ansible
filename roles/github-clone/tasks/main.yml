@@ -15,10 +15,10 @@
 
 - name: create config for deployment key with GitHub
   ansible.builtin.copy:
-    dest: '.ssh/config.d/github.com+{{ from }}+{{ repo }}.conf'
+    dest: '.ssh/config.d/github.com+{{ from }}+{{ repo | default(key) }}.conf'
     mode: '644'
     content: |
-      Host github.com+{{ from }}+{{ repo }}
+      Host github.com+{{ from }}+{{ repo | default(key) }}
         Hostname github.com
         User git
         IdentityFile ~/.ssh/keys/id_{{ key }}
@@ -27,9 +27,9 @@
         StrictHostKeyChecking accept-new
   when: key is defined
 
-- name: 'clone https://github.com/{{ from }}/{{ repo }}.git'
+- name: 'clone https://github.com/{{ from }}/{{ repo | default(key) }}.git'
   ansible.builtin.git:
-    repo: '{{ key is defined | ternary("github.com+{{ from }}+{{ repo }}:", "https://github.com/") }}/{{ from }}/{{ repo }}.git'
+    repo: '{{ key is defined | ternary("github.com+"+from+"+"+(repo | default(key))+":", "https://github.com/") }}/{{ from }}/{{ repo | default(key) }}.git'
     dest: '{{ dest | default(repo) }}'
     depth: '{{ depth | default(0) }}'
 
