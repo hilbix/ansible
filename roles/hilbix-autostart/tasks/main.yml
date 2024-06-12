@@ -1,0 +1,28 @@
+
+- ansible.builtin.import_role:
+    name: hilbix-src
+
+- ansible.builtin.include_role:
+    name: hilbix-src
+    tasks_from: install
+  vars:
+    prog: ptybuffer
+
+- ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '755'
+  loop:
+    - bin
+    - autostart
+
+- ansible.builtin.copy:
+    dest: bin/
+    src: src/ptybuffer/script/autostart.sh
+    mode: '755'
+    remote_src: true
+
+- ansible.builtin.cron:
+    name: "run autostart/"
+    job: "bin/autostart.sh >/dev/null"
+
