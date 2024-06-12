@@ -2,9 +2,14 @@
 
 Install files `files/ssh-id/xxxx/*.key` and `files/ssh-id/xxxx/*.pub` to `~/.ssh/`
 
+- `files/ssh-id/{{key}}/*.key` is searched, where `*` becomes `{{name}}`
+- `files/ssh-id/{{key}/{{name}}.key` source file for `.ssh/{{dir}}/id_{{name}}`
+- `files/ssh-id/{{key}/{{name}}.pub` source file for `.ssh/{{dir}}/id_{{name}}.pub`
+
 `keys`
 - string
 - list of strings
+- there is no default yet
 
 `users`
 - string
@@ -13,10 +18,8 @@ Install files `files/ssh-id/xxxx/*.key` and `files/ssh-id/xxxx/*.pub` to `~/.ssh
 
 `dir`
 - string
-- defaults to .
-
-- `files/ssh-id/{{key}/name.key` source file for `.ssh/{{dir}}/name`
-- `files/ssh-id/{{key}/name.pub` source file for `.ssh/{{dir}}/name.pub`
+- defaults to `keys` which means `.ssh/keys/`
+- use `dir: .` to put the key directly into `.ssh/`
 
 Examples:
 
@@ -40,5 +43,7 @@ Examples:
 
 ## TODO
 
-- generate the `.pub` out of `.key` if missing
+- there should be some suitable default for `keys` (like the current host name)
+  - undecided yet, I need to gather common usage patterns first
+- generate the `.pub` out of `.key` if the `.pub` is missing
 
