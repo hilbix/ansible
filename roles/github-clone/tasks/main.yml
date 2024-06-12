@@ -1,0 +1,35 @@
+
+- name: create ~/.ssh/config.d/ directory
+  ansible.builtin.file:
+    path: .ssh/config.d
+    state: directory
+    mode: '755'
+  when: key is defined
+
+- name: create ~/.ssh/config which includes ~/.ssh/config.d/
+  ansible.builtin.copy:
+    dest: .ssh/config
+    content: |
+      Include ~/.ssh/config.d/*.conf
+  when: key is defined
+
+- name: create config for deployment key with GitHub
+  ansible.builtin.copy:
+    dest: '.ssh/config.d/github.com+{{ from }}+{{ repo }}.conf'
+    mode: '644'
+    content: |
+      Host github.com+{{ from }}+{{ repo }}
+        Hostname github.com
+        User git
+        IdentityFile ~/.ssh/keys/id_{{ key }}
+        IdentitiesOnly yes
+        IdentityAgent none
+        StrictHostKeyChecking accept-new
+  when: key is defined
+
+- name: 'clone https://github.com/{{ from }}/{{ repo }}.git'
+  ansible.builtin.git:
+    repo: '{{ key is defined | ternary("github.com+{{ from }}+{{ repo }}:", "https://github.com/") }}/{{ from }}/{{ repo }}.git'
+    dest: '{{ dest | default(repo) }}'
+    depth: '{{ depth | default(0) }}'
+
