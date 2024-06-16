@@ -18,7 +18,20 @@ findfile()
   do
 	[ -f "$a" ] && b="$a"
   done
-  ov "$1" readlink -e -- "$b"
+  v "$1" readlink -e -- "$b"
+}
+
+findorcreate()
+{
+  while	findfile "$@" && return
+  do
+	PS3="create file:" select create in "${@:2}"
+	do
+		touch "$create"
+		break
+	done || break
+  done
+  OOPS missing "${@:2}"
 }
 
 #U	-v -vv -vvv	be verbose
@@ -33,7 +46,7 @@ usage()
   exit 42;
 }
 
-findfile INV "$DIR/inventory.ini" inventory.ini
+findorcreate INV inventory.ini inventory/inventory.ini "$DIR/inventory/inventory.ini" "$DIR/inventory.ini"
 
 OPTION=()
 while	case "$1" in
@@ -54,7 +67,7 @@ do
 	esac
 	host="${host%.yml}"
 	host="${host%.yaml}"
-	findfile BOOK "$DIR/$host.yaml" "$DIR/$host.yml" "$host.yaml" "$host.yml"
+	findorcreate BOOK "$host.yml" "host/$host.yml" "$DIR/host/$host.yml" "$DIR/$host.yml"
 
 	egrep -q -x "^${host//./[.]}($|[[:space:]])" "$INV" || echo "$host" >> "$INV"
 
