@@ -4,12 +4,12 @@
     path: /usr/local/bin/{{ prog }}
   register: item_stat
 
-- name: compiling {{ prog }}
+- name: compile {{ prog }}
   ansible.builtin.shell:
     cmd: make -C src/{{ prog }}/
   when: not item_stat.stat.exists
 
-- name: installing {{ prog }}
+- name: install {{ prog }}
   ansible.builtin.shell:
     cmd: make -C src/{{ prog }}/ install
   become: true
