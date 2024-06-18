@@ -1,0 +1,16 @@
+
+- name: create /etc/ssh/sshd_config.end
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.end
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: add include for /etc/ssh/sshd_config.end at end of /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "Include /etc/ssh/sshd_config.end/*.conf"
+    owner: root
+  notify: Restart sshd
+
