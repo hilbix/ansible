@@ -58,8 +58,6 @@ usage()
   exit 42;
 }
 
-findorcreate INV inventory.ini inventory/inventory.ini "$DIR/inventory/inventory.ini" "$DIR/inventory.ini"
-
 OPTION=()
 while	case "$1" in
 	(-h*|--h*)	usage;;
@@ -71,6 +69,19 @@ do
 	shift
 done
 
+if	test 0 = $#
+then
+	HORST="$(hostname -f)"
+	set -- "$HORST"
+#	OPTION+=(-c local)
+	TMPFILE="$(mktemp)"
+	trap 'rm -f "$TMPFILE"' 0
+	echo "$HORST ansible_connection=local" > "$TMPFILE"
+	INV="$TMPFILE"
+else
+	findorcreate INV inventory.ini inventory/inventory.ini "$DIR/inventory/inventory.ini" "$DIR/inventory.ini"
+fi
+
 for host
 do
 	case "$host" in
@@ -79,7 +90,7 @@ do
 	esac
 	host="${host%.yml}"
 	host="${host%.yaml}"
-	findorcreate BOOK "$host.yml" "host/$host.yml" "$DIR/host/$host.yml" "$DIR/$host.yml"
+	findorcreate BOOK "$host.yml" "hosts/$host.yml" "$DIR/hosts/$host.yml" "$DIR/$host.yml"
 
 	egrep -q -x "^${host//./[.]}($|[[:space:]])" "$INV" || echo "$host" >> "$INV"
 
