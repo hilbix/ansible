@@ -6,12 +6,12 @@
 
 - name: compile {{ prog }}
   ansible.builtin.shell:
-    cmd: make -C src/{{ prog }}/
+    cmd: make -C {{ user_home.stdout }}/src/{{ prog }}/
   when: not item_stat.stat.exists
 
 - name: install {{ prog }}
   ansible.builtin.shell:
-    cmd: make -C src/{{ prog }}/ install
+    cmd: make -C {{ user_home.stdout }}/src/{{ prog }}/ install
   become: true
   when: not item_stat.stat.exists
 
