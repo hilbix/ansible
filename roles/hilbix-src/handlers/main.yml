@@ -1,5 +1,5 @@
 
 - name: Make gitstart
   ansible.builtin.shell:
-    cmd: make -C src/gitstart
+    cmd: "make -C {{ user_home.stdout }}/src/gitstart"
 
