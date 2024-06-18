@@ -7,11 +7,15 @@
   ansible.builtin.shell:
     cmd: id -u
   register: userid
+  changed_when: false
+  check_mode: no
 
 - name: get HOME
   ansible.builtin.shell:
     cmd: 'getent passwd {{ userid.stdout }} | cut -d: -f6'
   register: userhome
+  changed_when: false
+  check_mode: no
 
 - name: "download https://github.com/hilbix/fix.git to {{ userhome.stdout }}/git/fix/"
   ansible.builtin.git:
