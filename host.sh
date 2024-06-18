@@ -21,16 +21,28 @@ findfile()
   v "$1" readlink -e -- "$b"
 }
 
+createfile()
+{
+  local PS3="create file: "
+  local -A HAVE a b
+
+  for a
+  do
+	ov b readlink -m "$a"
+	test -z "${HAVE["$b"]}" || continue
+        HAVE["$b"]="$a"
+  done
+  select a in "${!HAVE[@]}";
+  do
+	o touch "$a" && return
+  done
+}
+
 findorcreate()
 {
   while	findfile "$@" && return
-  do
-	PS3="create file:" select create in "${@:2}"
-	do
-		touch "$create"
-		break
-	done || break
-  done
+	createfile "${@:2}"
+  do :; done
   OOPS missing "${@:2}"
 }
 
