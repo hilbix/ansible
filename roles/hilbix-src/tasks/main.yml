@@ -32,7 +32,7 @@
 - name: "install standard .gitconfig"
   ansible.builtin.copy:
     src: files/gitconfig
-    dest: .gitconfig
+    dest: "{{ user_home.stdout }}/.gitconfig"
     force: false
   notify: Make gitstart
 
