@@ -1,13 +1,22 @@
 
-- name: check src/ exists
+# Apparently Ansible lacks the possibility to find out the current HOME of the current USER
+# https://github.com/ansible/ansible/issues/15901#issuecomment-352400456
+# Note Ansible is still broken even that this bug is closed AND locked!
+- name: Get current HOME
+  ansible.builtin.shell: "echo $HOME"
+  register: user_home
+  changed_when: false
+  check_mode: no
+
+- name: "check {{ user_home.stdout }}/src/ exists"
   ansible.builtin.stat:
-    path: src
+    path: "{{ user_home.stdout }}/src"
   register: src_check
 
-- name: "install src/"
+- name: "install {{ user_home.stdout }}/src/"
   ansible.builtin.git:
     repo: https://github.com/hilbix/src.git
-    dest: src
+    dest: "{{ user_home.stdout }}/src"
     version: 15293a58a46b0600f63fc678d0fb149210f2c1ea
     refspec: refs/heads/master
   when: not src_check.stat.exists
