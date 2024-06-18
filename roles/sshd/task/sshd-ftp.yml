@@ -1,0 +1,50 @@
+# TODO:
+# - Allow other paths than /home/ftp
+# - Allow other groups than ftp
+
+- name: create /etc/ssh/sshd_config.end
+  ansible.builtin.include_task: sshd-end
+
+- name: Set users to sftp-internal
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.end/sftponly.conf
+    mode: '0755'
+    owner: root
+    group: root
+    content: |
+      Match group ftp
+        ForceCommand internal-sftp
+        ChrootDirectory %h
+        PermitTunnel no
+        AllowTcpForwarding no
+        X11Forwarding no
+  notify: Restart sshd
+
+- name: ssh requires home of sftp-internal users to be owned by root:root
+  ansible.builtin.file:
+    path: /home/ftp/{{ item }}
+    mode: '0755'
+    owner: root
+    group: root
+  loop:
+    - .
+    - .ssh
+
+- name: own some files of sftp-internal users by root:root
+  ansible.builtin.file:
+    path: /home/ftp/{{ item }}
+    mode: '0644'
+    owner: root
+    group: root
+  loop:
+    - .ssh/authorized_keys
+
+- name: remove files of sftp-internal users which are of no use
+  ansible.builtin.file:
+    path: /home/ftp/{{ item }}
+    state: absent
+  loop:
+    - .bashrc
+    - .bash_logout
+    - .profile
+
