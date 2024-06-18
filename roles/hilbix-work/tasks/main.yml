@@ -54,13 +54,6 @@
 - ansible.builtin.import_role:
     name: hilbix-src
 
-- name: install standard .gitconfig
-  ansible.builtin.copy:
-    src: files/gitconfig
-    dest: .gitconfig
-    force: false
-  notify: Make gitstart
-
 - name: install fixes
   ansible.builtin.import_role:
     name: hilbix-fix
