@@ -1,0 +1,16 @@
+
+# Apparently Ansible lacks the possibility to find out the current HOME of the current USER
+# https://github.com/ansible/ansible/issues/15901#issuecomment-352400456
+# Note Ansible is still broken even that this bug is closed AND locked!
+- name: Get current HOME
+  ansible.builtin.shell: "echo $HOME"
+  register: user_home_env
+  changed_when: false
+  check_mode: no
+
+- ansible.builtin.set_fact:
+    cachable: no
+    user_home: "{{ user_home_env.stdout }}"
+  changed_when: false
+  check_mode: no
+
