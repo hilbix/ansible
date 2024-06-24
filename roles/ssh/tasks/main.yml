@@ -1,0 +1,19 @@
+
+- ansible.builtin.include_role:
+    name: home
+
+- name: create {{ user_home }}/.ssh/ directory
+  ansible.builtin.file:
+    path: "{{ user_home }}/{{ item }}"
+    state: directory
+    mode: '755'
+  loop:
+    - .ssh
+    - .ssh/.config.d
+
+- name: create {{ user_home }}/.ssh/config which includes ~/.ssh/config.d/
+  ansible.builtin.copy:
+    dest: "{{ user_home }}/.ssh/config"
+    content: |
+      Include ~/.ssh/config.d/*.conf
+
