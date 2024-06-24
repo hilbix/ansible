@@ -4,9 +4,10 @@
 >
 > See also [CONFUSED.md](CONFUSED.md) which I (should) softlink to roles as README which are not ready to be used.
 
+
 # roles
 
-These are my Ansible roles for all the standard things.
+These are my Ansible roles for standard things.
 
 > This still is very basic and not stable yet!
 >
@@ -19,10 +20,10 @@ Layout:
 - Each main role has its own README.md
   - Roles are usually named after the package they use with the same case as the package
   - Hence role names usually are all lowercase
-  - main roles contain the install task is some is needed
+  - main roles contain the install task if some is needed
 - `handlers/` are named after their role
-  - The action is uppercase
-  - The name is the same case as the role
+  - The action is capitalized
+  - The name has the same case as the role
 - Example standard handler names for `something/handler/`:
   - `Restart something` (includes `Start`)
   - `Reload something` (includes `Start`)
@@ -34,11 +35,13 @@ Layout:
 Bullshit bingo:
 
 - Some names are wrong and might change in future
+- And I am too lazy to add things I do not need yet
 
 Specialized roles:
 
 - Specialized roles are named after the main roles with `-` or `--` prefixed lowercase words to select what they do
   - Many of them are probably bullshit and will be incorporated into the main role using variables in future, probably
+  - Or with sub-tasks or whatever seems fit
 - Usually all `templates/` of these specialized roles are kept in the main role
 
 **WARNING!** Explicite language here:
@@ -61,15 +64,16 @@ Specialized roles:
 - Also keep in mind: **Politically correctness is unsupported here**
   - So you might find statements like "I hate vegan" (which I really do).
 - Please do not get me wrong.
-  - I do not hate vegans (`s`!), because often those vegans are extremely hot bitches I'd really like to fuck (if they'd agree, which is very unlikely, but hey, I'm a male het).
-  - And I do not hate vegan food either as I like salad and potatoes (with my ham and eggs)!
+  - I do not hate vegans (`s`!), because often those vegans are extremely hot bitches I'd really like to fuck and have children with them (if they'd agree, which is very unlikely, but hey, I'm just some honest dirty male het).
+  - And I do not hate vegan food either as I like salad and potatoes (with ham and eggs)!  (Note that I am [HAM](https://en.wikipedia.org/wiki/Etymology_of_ham_radio), too.)
   - But please do not confuse "vegan" with "organic"!  Most "vegan" marked products are nothing less than ridiculously overpriced pure and evil poison.
   - So its just the word "vegan" which I hate, because of how it is used most of the time and hence what it did to this world!
   - Also vegan products usually are sold far more expensive than meat.  I really do not understand that.  And I never will.
   - Note that even equally priced vegan products (like with Burgers) are effectively extremely overpriced, because with meat you stay far longer saturated, so you need to buy less.
   - I can tell.  I am diabetic!
-  - So a vegan "replacement" part should not be allowed to cost more than half of meat part in the food.
-  - This even should be put into a law!
+  - So a vegan "replacement" part should not be allowed to cost more than half of meat part in the food it replaces.
+  - And it should be at least as healty as the meat product!  (Which often is not the case due to posionous addons!)
+  - This all even should be put into a law!
   - On top of this there should also be a tax of 1 cent per kg meat per year.  So the tax rises 1 cent each year.
   - And yes, I am a meat eater.  So what I write here is politically incorrect to all sides?  You bet it is and that's how I like it!
 
