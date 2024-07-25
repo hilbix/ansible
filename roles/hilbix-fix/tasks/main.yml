@@ -35,7 +35,7 @@
     cmd: make
   when: hilbix_fix.changed
 
-- name: root only hacks
+- name: root-only hacks
   ansible.builtin.include_tasks: hilbix-fix-root.yml
   when: userid.stdout == "0"
 
