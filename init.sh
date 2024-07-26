@@ -8,6 +8,8 @@
 TARGET=git/ansible
 
 DEST="${1:?Give destinatin as first argument}"
+DEST="${DEST##*/}"
+DEST="${DEST%.yml}"
 
 STDOUT() { printf %q "$1"; printf ' %q' "${@:2}"; printf '\n'; }
 STDERR() { local e=$?; STDOUT "$@" >&2; return $e; }
