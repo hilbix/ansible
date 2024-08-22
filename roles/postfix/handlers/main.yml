@@ -1,0 +1,21 @@
+
+- name: Start postfix
+  ansible.builtin.service:
+    name: postfix
+    state: started
+ 
+- name: Restart postfix
+  ansible.builtin.service:
+    name: postfix
+    state: restarted
+
+- name: Stop postfix
+  ansible.builtin.service:
+    name: postfix
+    state: started
+ 
+- name: Restart dovecot
+  ansible.builtin.service:
+    name: dovecot
+    state: restarted
+
