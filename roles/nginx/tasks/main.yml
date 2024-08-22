@@ -12,3 +12,17 @@
     state: absent
   become: true
 
+- name: Create /etc/nginx/dhparam
+  ansible.builtin.get_url:
+    url: https://ssl-config.mozilla.org/ffdhe2048.txt
+    dest: /etc/nginx/ffdhe2048.txt
+
+- name: Install sites
+  ansible.builtin.template:
+    src: "{{ item }}.nginx"
+    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    mode: "0644"
+    owner: root
+    group: root
+  loop: "{{ sites is string | ternary([sites], sites | default([])) | list }}"
+
