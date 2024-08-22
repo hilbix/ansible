@@ -1,0 +1,42 @@
+# {{ ansible_managed }}
+
+allow-hotplug {{ dev }}
+
+{% for ip in ip4 is string | ternary([ip4], ip4) %}
+iface {{ dev }} inet static
+	address {{ ip }}
+{% if loop.index == 1 and gw4 %}
+	gateway {{ gw4 }}
+{% endif %}
+{% endfor %}
+{% for down in down4 is string | ternary([down4], down4 | default([])) %}
+down {{ down }} || :
+{% endfor %}
+{% for both in both4 is string | ternary([both4], both4 | default([])) %}
+down {{ both }} || :
+up   {{ both }} || :
+{% endfor %}
+{% for up in up4 is string | ternary([up4], up4 | default([])) %}
+up   {{ up }} || :
+{% endfor %}
+
+{% if ip6 is defined %}
+{% for ip in ip6 is string | ternary([ip6], ip6) %}
+iface {{ dev }} inet6 static
+	address {{ ip }}
+{% if loop.index == 1 and gw6 %}
+	gateway {{ gw6 }}
+{% endif %}
+{% endfor %}
+{% for down in down6 is string | ternary([down6], down6 | default([])) %}
+down {{ down }} || :
+{% endfor %}
+{% for both in both6 is string | ternary([both6], both6 | default([])) %}
+down {{ both }} || :
+up   {{ both }} || :
+{% endfor %}
+{% for up in up6 is string | ternary([up6], up6 | default([])) %}
+up   {{ up }} || :
+{% endfor %}
+{% endif %}
+
