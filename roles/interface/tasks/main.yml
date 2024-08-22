@@ -1,0 +1,16 @@
+
+- name: create /etc/network/interfaces.d/{{ dev }}
+  ansible.builtin.template:
+    src: interface-template.txt
+    dest: /etc/network/interfaces.d/{{ dev }}
+    mode: "0644"
+    owner: root
+    group: root
+  notify: Reboot
+
+- name: remove interface {{ dev }} from /etc/network/interfaces
+  ansible.builtin.lineinfile:
+    path: /etc/network/interfaces
+    regexp: ' {{ dev }}( |$)'
+    state: absent
+
