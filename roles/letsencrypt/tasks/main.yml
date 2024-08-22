@@ -1,0 +1,52 @@
+# Create /etc/letsencrypt/ for SFTP access for some VM which deploys SSL certs there
+
+- name: create LE group
+  ansible.builtin.group:
+    name: letsencrypt
+    state: present
+
+- name: create LE user
+  ansible.builtin.user:
+    name: letsencrypt
+    group: letsencrypt
+    home: /etc/letsencrypt
+    shell: /bin/bash
+    state: present
+
+- name: create LE home
+  ansible.builtin.file:
+    path: /etc/letsencrypt{{ item }}
+    owner: letsencrypt
+    group: letsencrypt
+    mode: '0755'
+    state: directory
+  loop:
+    - ''
+    - /.ssh
+    - /certs
+    - /web
+    - /web/.well-known
+    - /web/.well-known/acme-challenge
+
+- name: configure sshd
+  ansible.builtin.include_role:
+    name: sshd
+    tasks_from: sshd-end
+
+- name: sftp-only LE
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.end/letsencrypt
+    content: |
+      Match Group letsencrypt
+        AllowTcpForwarding no
+        X11Forwarding no
+        ChrootDirectory %h
+        ForceCommand internal-sftp -u 022
+
+- name: create LE authorized-keys
+  ansible.builtin.import_role:
+    name: authorized-keys
+  vars:
+    users: letsencrypt
+    keys: letsencrypt
+
