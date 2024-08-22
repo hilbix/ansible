@@ -1,0 +1,104 @@
+
+- name: Install Postfix and Dovecot
+  ansible.builtin.apt:
+    name:
+      - postfix
+      - dovecot-core
+      - dovecot-lmtpd
+      - dovecot-imapd
+      - dovecot-pop3d
+    state: latest
+
+#      - sasl2-bin
+#      - libsasl2-modules
+
+#- name: create /etc/postfix/sasl/smtpd.conf
+#  ansible.builtin.template:
+#    src: sasl-smtpd.conf
+#    dest: /etc/postfix/sasl/smtpd.conf
+#    mode: "0644"
+#    owner: root
+#    group: root
+#  notify: Restart postfix
+#
+#- name: create /etc/default/saslauthd-postfix
+#  ansible.builtin.template:
+#    src: saslauthd-postfix.txt
+#    dest: /etc/default/saslauthd-postfix
+#    mode: "0644"
+#    owner: root
+#    group: root
+#  register: postfix_saslauthd_setup
+#  notify: Restart saslauthd
+#
+#- name: Overrides ownership and mode of /var/spool/postfix/var/run/saslauthd
+#  ansible.builtin.shell: "dpkg-statoverride --add root sasl 750 /var/spool/postfix/var/run/saslauthd"
+#  when: postfix_saslauthd_setup.changed
+#  notify: Restart saslauthd
+#
+#- name: Add postfix user to group sasl
+#  ansible.builtin.user:
+#    name: postfix
+#    groups: sasl
+#    append: yes
+#  notify: Restart saslauthd
+
+# http://www.postfix.org/SASL_README.html#server_sasl_enable
+#    postconf -e 'cyrus_sasl_config_path = /etc/postfix/sasl' &&
+#    postconf -e 'smtpd_sasl_local_domain = $myhostname' &&
+#    postconf -e 'smtpd_tls_auth_only = yes' &&
+- name: update postfix configuriation using postconf
+  ansible.builtin.shell: |
+    postconf -e 'smtpd_sasl_auth_enable = yes' &&
+    postconf -e 'broken_sasl_auth_clients = yes' &&
+    postconf -e 'smtpd_relay_restrictions = permit_sasl_authenticated, reject_sender_login_mismatch, permit_mynetworks, reject_unauth_destination' &&
+    postconf -e 'smtpd_sasl_security_options = noanonymous, noplaintext' &&
+    postconf -e 'smtpd_sasl_tls_security_options = noanonymous' &&
+    postconf -e 'virtual_mailbox_domains = {{ domains }}' &&
+    postconf -e 'virtual_alias_domains =' &&
+    postconf -e 'virtual_uid_maps = static:5000' &&
+    postconf -e 'virtual_gid_maps = static:5000' &&
+    postconf -e 'virtual_minimum_uid = 100' &&
+    postconf -e 'virtual_mailbox_base = /srv/vmail' &&
+    postconf -e 'smtpd_sender_login_maps = hash:/srv/postfix/senders' &&
+    postconf -e 'virtual_mailbox_maps = hash:/srv/postfix/vmaps' &&
+    postconf -e 'virtual_alias_maps = hash:/srv/postfix/virtual' &&
+    postconf -e 'smtpd_sasl_type = dovecot' &&
+    postconf -e 'smtpd_sasl_path = private/auth' &&
+    :
+  notify: Restart postfix
+
+- name: set LE certs
+  ansible.builtin.shell: |
+    postconf -e 'smtpd_tls_cert_file={{ ssl_cert }}' &&
+    postconf -e 'smtpd_tls_key_file={{ ssl_key }}'
+    :
+  notify: Restart postfix
+  when: ssl_cert is defined
+
+- name: Add vmail group 5000
+  ansible.builtin.group:
+    name: vmail
+    gid: 5000
+    state: present
+  
+- name: Add vmail user 5000
+  ansible.builtin.user:
+    name: vmail
+    uid: 5000
+    group: vmail
+    shell: /sbin/nologin
+    state: present
+  notify: Restart saslauthd
+
+# Following files do not belong into this standard rulset (yet),
+# because these contain privacy data which must not be published.
+#
+# mkdir /srv/vmail && chown 5000:5000 /srv/vmail
+# postmap /srv/postfix/senders
+# postmap /srv/postfix/vmaps
+# postmap /srv/postfix/virtual
+#
+# FYI I put these into a raw device which is not snapshotted by default,
+# so I can rebuild the VM from scratch not losing any data.
+
