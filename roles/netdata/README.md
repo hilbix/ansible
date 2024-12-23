@@ -3,23 +3,42 @@
 ```
   roles:
     - role: netdata
-      type: client
-      server: IP
+      netdata-type: client
+      netdata-server: IP
 ```
 
-`type`: (not yet implemented)
+```
+  tasks:
+    - name: install netdata
+      ansible.builtin.import_role:
+        name: netdata
+        netdata-type: client
+        netdata-server: IP
+      become: true
+```
+
+`group_vars/groupname`:
+```
+netdata-server: IP
+```
+
+`netdata-type`: (not yet implemented)
 
 - `client` transmits data to relay, cache or server, keeps nothing on disk or in memory
 - `relay`  receives data and transmits to `cache` or `server`, keeps data only in memory
 - `cache`  receives data and transmits to `server`, caches data on disk between restarts, may run its own `rrdcached`
 - `server` receives data, stores data on disk between restarts, runs `rrdcached`
 
-`client`: (not yet implemented)
-- default type if `server` variable is set
+`client`:
+
+- default type
+- fact: `netdata-server`
+  - routed IP does not match `netdata-server`
+- fact: `netdata-server`
 
 `server`: (not yet implemented)
 
-- default type if local IP matches `netdata-server`
+- default type if routed IP matches `netdata-server`
 - fact: `netdata-server`
 - The IP of the server
   - `IPv4:port`
@@ -64,12 +83,13 @@ This does not support NetData cloud, because this is meant for offline cluster s
 
 # Missing
 
-- `type` not yet implemented.
+- `netdata-type` not yet implemented.
   - For now please use role `netdata-server` for server instead
-- `apikey`
+- `netdata-apikey`
   - it is `00000000-0000-0000-0000-000000000000` for now
-- `port`
+- `netdata-port`
   - it is the default `19999`
 - `relay`, `cache`, `server`
   - T.B.D.
+- `netdata-server` and `netdata-type` should allow a shortcut `server` and `type` for within the role
 
