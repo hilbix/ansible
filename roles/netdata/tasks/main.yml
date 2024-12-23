@@ -5,3 +5,16 @@
       - netdata
     state: latest
 
+- name: Configure client
+  ansible.builtin.template:
+    src: netdata-client/{{ item }}
+    dest: /etc/netdata/{{ item }}
+    mode: "0644"
+    owner: root
+    group: root
+  loop:
+    - netdata.conf
+    - stream.conf
+  notify: Restart netdata
+  when: vars['netdata-server'] is defined
+
