@@ -1,0 +1,28 @@
+
+---
+
+- name: Copy I2P key
+  ansible.builtin.copy:
+    src: i2p/i2p-archive-keyring.gpg
+    dest: /etc/apt/keyrings/i2p-archive-keyring.gpg
+
+- name: get distribution
+  ansible.builtin.shell:
+    cmd: '. /etc/os-release && echo "$VERSION_CODENAME"'
+  register: distribution
+  changed_when: false
+#  check_mode: no
+
+- name: Add I2P Debian repository
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/i2p-archive-keyring.gpg] https://deb.i2p.net/ {{ distribution.stdout }} main'
+    state: present
+    filename: 'i2pd'
+
+- name: Setup i2pd package
+  ansible.builtin.apt:
+    name:
+    - i2pd
+    - i2p-keyring
+    state: present
+
