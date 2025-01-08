@@ -1,10 +1,19 @@
 
 - name: Setup chrony VM serving time given by ProxMox
   ansible.builtin.template:
-    src: chrony-server-proxmox.conf
+    src: chrony-server/proxmox.conf
     dest: /etc/chrony/chrony.conf
     owner: root
     group: root
     mode: "0644"
   notify: Restart chrony
+
+- name: Setup chrony VM serving time given by ProxMox
+  ansible.builtin.template:
+    src: chrony-server/module.conf
+    dest: /etc/modules-load.d/chrony.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reboot
 
