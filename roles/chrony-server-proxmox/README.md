@@ -2,7 +2,7 @@
 
 # role `chrony-server-proxmox`
 
-This role creates a chrony-server using RTC of the underlying host (like ProxMox) as the (only) time source.
+This role creates a chrony-server using kernel module `kvm_ptp` to get the time from the underlying host (like ProxMox) as the (only) time source.
 
 This means you do not need Internet connectivity for this.
 
