@@ -2,7 +2,7 @@
 - hosts: all
   gather_facts: false
   become: yes
- 
+
   tasks:
 
     - name: update everything
@@ -41,9 +41,20 @@
           PasswordAuthentication no
           ChallengeResponseAuthentication no
 
+    - name: Find cloudinit stuff in /etc/ssh
+      register: cloudinit_files
+      find:
+        paths: /etc/ssh/sshd_config.d/
+        patterns: "*cloud-init*.conf"
+
+    - name: Disable cloudinit stuff from /etc/ssh
+      register: cloudinit_cleanup
+      command: /bin/mv -f --backup=t "{{ item['path'] }}" "{{ item['path'] }}.disabled"
+      with_items: "{{ cloudinit_files['files'] }}"
+
     - name: Restart SSH if needed
       service:
         name: sshd
         state: restarted
-      when: sshd_conf_d.changed
+      when: sshd_conf_d.changed or cloudinit_cleanup.changed
 
