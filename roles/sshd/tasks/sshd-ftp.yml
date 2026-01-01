@@ -2,8 +2,10 @@
 # - Allow other paths than /home/ftp
 # - Allow other groups than ftp
 
-#- name: create /etc/ssh/sshd_config.end
-#  ansible.builtin.include_task: sshd-end
+- name: cleanup /etc/ssh/sshd_config.end
+  ansible.builtin.include_task: sshd-end
+  vars:
+    files: sftponly.conf
 
 - name: Set users to sftp-internal
   ansible.builtin.copy:
