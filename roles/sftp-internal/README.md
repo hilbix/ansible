@@ -22,7 +22,7 @@ Restrict users to `sftp-internal` of `sshd`.
 - All users must already exist
 - Their home is cleaned from files which are not needed for noninteractive users!
 - The given users are caged into their home directory via `chroot` and `sftp-internal` of `sshd`
-- This includes the `ssh-end` role to add a rule to your `/etc/ssh/sshd_config`
+- ~~This includes the `ssh-end` role to add a rule to your `/etc/ssh/sshd_config`~~
 
 # Description
 
