@@ -2,7 +2,7 @@
 - hosts: all
   become: true
   gather_facts: false
-  
+
   tasks:
     - name: First thing always to do is to install etckeeper
       raw: apt install -y etckeeper
