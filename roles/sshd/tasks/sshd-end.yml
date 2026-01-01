@@ -1,4 +1,10 @@
 
+- name: Cleanup possibly old files in /etc/ssh/sshd_config.end/
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.end/{{ item }}.conf
+    state: absent
+  loop: {{ files }}
+
 # WRONG
 #
 # After
