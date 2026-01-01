@@ -28,11 +28,6 @@
     - /web/.well-known
     - /web/.well-known/acme-challenge
 
-- name: configure sshd
-  ansible.builtin.include_role:
-    name: sshd
-    tasks_from: sshd-end
-
 - name: sftp-only LE
   ansible.builtin.copy:
     dest: /etc/ssh/sshd_config.d/letsencrypt
@@ -43,6 +38,16 @@
         ChrootDirectory %h
         ForceCommand internal-sftp -u 022
       Match Group *
+
+# Actually this was my own error historic setup
+# You might remove it this here!
+# (include_role is probably the right thing to do here)
+- name: cleanup /etc/ssh/sshd_config.end/ (if present)
+  ansible.builtin.include_role:
+    name: sshd
+    tasks_from: sshd-end
+    vars:
+      files: letsencrypt.conf
 
 - name: create LE authorized-keys
   ansible.builtin.import_role:
