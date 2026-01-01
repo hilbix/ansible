@@ -20,6 +20,11 @@
           - build-essential
           - gawk
           - psmisc
+          - htop
+          - tmux
+          - ifstat
+          - sysstat
+          - strace
         state: latest
 
     - name: Make vim the default editor
