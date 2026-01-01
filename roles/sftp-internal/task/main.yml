@@ -14,6 +14,13 @@
 #    owner: root
 #  notify: Restart sshd
 
+- name: cleanup /etc/ssh/sshd_config.end (if present)
+  ansible.builtin.include_role:
+    name: sshd
+    tasks_from: sshd-end
+    vars:
+      files: sftponly.conf
+
 - name: Set users to sftp-internal
   ansible.builtin.copy:
     dest: /etc/ssh/sshd_config.d/sftponly.conf
