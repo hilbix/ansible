@@ -35,13 +35,14 @@
 
 - name: sftp-only LE
   ansible.builtin.copy:
-    dest: /etc/ssh/sshd_config.end/letsencrypt
+    dest: /etc/ssh/sshd_config.d/letsencrypt
     content: |
       Match Group letsencrypt
         AllowTcpForwarding no
         X11Forwarding no
         ChrootDirectory %h
         ForceCommand internal-sftp -u 022
+      Match Group *
 
 - name: create LE authorized-keys
   ansible.builtin.import_role:
