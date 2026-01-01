@@ -1,7 +1,7 @@
 ---
 - hosts: all
   gather_facts: false
-  
+
   tasks:
     - name: Wait for reachable host
       become: false
@@ -10,6 +10,6 @@
         delay: 5
         connect_timeout: 5
         timeout: 360
-        host: "{{ ansible_host }}"
+        host: "{{ inventory_hostname }}"
       delegate_to: localhost
- 
+
