@@ -1,4 +1,6 @@
 > THIS IS NOT READY YET!
+>
+> TODO: Replace `prefix` with the real `$HOME`s of the `users`!
 
 # `sftp-internal`
 
@@ -7,7 +9,8 @@ Restrict users to `sftp-internal` of `sshd`.
 ```
   - roles:
     - ftp-user
-    - sftp-internal
+    - role: sftp-internal
+      users: ftp
     - role: authorized-keys
       users:
         - ftp
@@ -16,9 +19,11 @@ Restrict users to `sftp-internal` of `sshd`.
         - bob
 ```
 
-`users` (NOT YET IMPLEMENTED FOR sftp-internal!)
+`users`
+
 - list of strings
   - or just a single string
+  - defaults to `ftp`
 - All users must already exist
 - Their home is cleaned from files which are not needed for noninteractive users!
 - The given users are caged into their home directory via `chroot` and `sftp-internal` of `sshd`
