@@ -1,8 +1,9 @@
 [user]
-	name = {{ name }}
-	email = {{ email }}
+	name = {{ gitname }}
+	email = {{ gitmail }}
 [init]
-	defaultBranch = {{ defaultbranch | d(master) }}
+	defaultBranch = {{ gitdefault | d('master') }}
+{% raw %}
 [push]
 	default = simple
 [remote-hg]
@@ -71,3 +72,4 @@
 	ign = "!LC_ALL=C.UTF-8 bash -c  'for a; do git config --local --get-all ignore.bv | fgrep -qx \"$a\" || git config --local --add ignore.bv \"$a\"; done' --"
 [alias "tv"]
 	ign = "!LC_ALL=C.UTF-8 bash -c  'for a; do git config --local --get-all ignore.tv | fgrep -qx \"$a\" || git config --local --add ignore.tv \"$a\"; done' --"
+{% endraw %}
