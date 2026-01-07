@@ -36,8 +36,8 @@
   register: authorized_keys_shell_users
 
 - name: Create user if 'shell' variable is set
+  ansible.builtin.user:
     name: "{{ item.item }}"
-    shell: "{{ shell }}"
     comment: "User {{ item.item }}"
   loop: "{{ authorized_keys_shell_users.results }}"
   when: "{{ item.state | d('') == 'absent' }}"
