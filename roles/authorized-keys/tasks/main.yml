@@ -27,6 +27,21 @@
 #
 # Iteration 2 #
 
+- name: Check users to possibly create
+  ansible.builtin.user:
+    name: "{{ item }}"
+  check_mode: true
+  loop: "{{ (users is string | ansible.builtin.ternary([users], users | default([lookup('env', 'USER')]))) | list }}"
+  when: shell is string
+  register: authorized_keys_shell_users
+
+- name: Create user if 'shell' variable is set
+    name: "{{ item.item }}"
+    shell: "{{ shell }}"
+    comment: "User {{ item.item }}"
+  loop: "{{ authorized_keys_shell_users.results }}"
+  when: "{{ item.state | d('') == 'absent' }}"
+
 - name: Update authorized_keys from keys
   ansible.posix.authorized_key:
     user: "{{ item.0 }}"
