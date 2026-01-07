@@ -46,8 +46,8 @@
   ansible.builtin.include_role:
     name: sshd
     tasks_from: sshd-end
-    vars:
-      files: letsencrypt.conf
+  vars:
+    files: letsencrypt.conf
 
 - name: create LE authorized-keys
   ansible.builtin.import_role:
