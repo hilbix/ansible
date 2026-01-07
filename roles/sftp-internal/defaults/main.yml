@@ -1,0 +1,14 @@
+---
+
+sftponly_home:
+  subdirs:
+  - ''
+  - .ssh
+  files:
+  - .ssh/authorized_keys
+  remove:
+  - .bashrc
+  - .bash_logout
+  - .profile
+
+
