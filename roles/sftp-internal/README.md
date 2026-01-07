@@ -1,3 +1,5 @@
+> THIS IS NOT READY YET!
+
 # `sftp-internal`
 
 Restrict users to `sftp-internal` of `sshd`.
@@ -5,18 +7,16 @@ Restrict users to `sftp-internal` of `sshd`.
 ```
   - roles:
     - ftp-user
-    - role: sftp-only
-      users: ftp
+    - sftp-internal
     - role: authorized-keys
       users:
         - ftp
-        - root
       keys:
         - alice
         - bob
 ```
 
-`users`
+`users` (NOT YET IMPLEMENTED FOR sftp-internal!)
 - list of strings
   - or just a single string
 - All users must already exist
