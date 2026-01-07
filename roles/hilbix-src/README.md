@@ -13,8 +13,13 @@ Install <https://github.com/hilbix/src> and associated standard tools
 
 ## Parameters
 
-- `name`:  The name in the standard `.gitconfig`
-- `email`:  The email in the standard `.gitconfig`
+- `gitname`: The name in the standard `.gitconfig` (no default)
+- `gitmail`: The email in the standard `.gitconfig` (no default)
+- `getdefault`: The default branch (defaults to "master")
+
+## Not yet implemented
+
+- `github`: Your GitHub name
 
 ## Bugs
 
