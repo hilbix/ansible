@@ -5,8 +5,7 @@
 # generated 2024-08-22, Mozilla Guideline v5.7, nginx 1.17.7, OpenSSL 1.1.1k, intermediate configuration, no HSTS, no OCSP
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=intermediate&openssl=1.1.1k&hsts=false&ocsp=false&guideline=5.7
 server {
-    listen 443 ssl http2 default_server;
-    listen [::]:443 ssl http2;
+    listen [::]:443 ipv6only=off ssl http2 default_server;
     server_name	{{ ssl_dom | default('_') }};
 
     ssl_certificate {{ ssl_cert }};
