@@ -1,0 +1,6 @@
+
+- name: Install additional packages
+  ansible.builtin.apt:
+    name: '{{ pack }}'
+    state: latest
+
