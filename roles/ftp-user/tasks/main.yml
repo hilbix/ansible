@@ -11,5 +11,5 @@
     state: directory
     mode: '2755'
     owner: ftp
-    group: ftp
+    group: sftponly
 
