@@ -30,8 +30,8 @@
   become: yes
 
 - name: "install standard .gitconfig"
-  ansible.builtin.copy:
-    src: files/gitconfig
+  ansible.builtin.template:
+    src: gitconfig.default.j2
     dest: "{{ user_home.stdout }}/.gitconfig"
     force: false
   notify: Make gitstart
