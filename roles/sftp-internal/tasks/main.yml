@@ -1,0 +1,94 @@
+
+- name: cleanup /etc/ssh/sshd_config.end (if present)
+  ansible.builtin.include_role:
+    name: sshd
+    tasks_from: sshd-end
+  vars:
+    files: sftponly.conf
+
+- name: Get the HOMEs of the ftponly-users
+  ansible.builtin.user:
+    name: "{{ item }}"
+  check_mode: true
+  loop: "{{ (users is string | ansible.builtin.ternary([users], users | d(['ftp']))) | list }}"
+  register: sftponly_users_all
+
+- name: Report nonexisting users
+  ansible.builtin.debug:
+    msg: "User {{ item.item }} does not exist!"
+  loop: "{{ sftponly_users_all.results }}"
+  when: item.state | d('') != 'present'
+
+- name: Stop if there are nonexisting users
+  ansible.builtin.fail:
+    msg: "please create the user first"
+  loop: "{{ sftponly_users_all.results }}"
+  when: item.state | d('') != 'present'
+
+- name: Ensure group "sftponly" exists
+  ansible.builtin.group:
+    name: sftponly
+    state: present
+
+- name: Implement ssh rule for sftp-internal
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/sftponly.conf
+    mode: '0755'
+    owner: root
+    group: root
+    content: |
+      Match group sftponly
+        ForceCommand internal-sftp
+        ChrootDirectory %h
+        PermitTunnel no
+        AllowTcpForwarding no
+        X11Forwarding no
+      Match group *
+  notify: Restart sshd
+
+#- debug:
+#    msg: "{{ item[0].home }}/{{ item[1] }}"
+#  loop: "{{ sftponly_users_all.results | ansible.builtin.product( sftponly_home.subdirs ) | list }}"
+
+- name: ssh requires home of sftp-internal users to be owned by root:root
+  ansible.builtin.file:
+    path: "{{ item[0].home }}/{{ item[1] }}"
+    mode: '0755'
+    owner: root
+    group: root
+    state: directory
+  loop: "{{ sftponly_users_all.results | ansible.builtin.product( sftponly_home.subdirs ) | list }}"
+
+- name: own some files of sftp-internal users by root:root
+  ansible.builtin.file:
+    path: "{{ item[0].home }}/{{ item[1] }}"
+    mode: '0644'
+    owner: root
+    group: root
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+  loop: "{{ sftponly_users_all.results | ansible.builtin.product( sftponly_home.files ) | list }}"
+
+- name: remove files of sftp-internal users which are of no use
+  ansible.builtin.file:
+    path: "{{ item[0].home }}/{{ item[1] }}"
+    state: absent
+  loop: "{{ sftponly_users_all.results | ansible.builtin.product( sftponly_home.remove ) | list }}"
+
+- name: create the home directory under the chroot
+  ansible.builtin.file:
+    path: "{{ item.home }}/{{ item.item }}"
+    mode: '2750'
+    group: sftponly
+    owner: "{{ item.item }}"
+    state: directory
+  loop: "{{ sftponly_users_all.results }}"
+
+- name: add the users to group "sftponly"
+  ansible.builtin.user:
+    name: "{{ item.item }}"
+    groups: sftponly
+    append: yes
+  loop: "{{ sftponly_users_all.results }}"
+
