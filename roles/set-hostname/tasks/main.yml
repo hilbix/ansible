@@ -1,0 +1,21 @@
+
+- name: Get the original hostname
+  ansible.builtin.hostname:
+    name: "{{ to }}"
+    use: systemd
+  check_mode: true
+  register: update_hostname_current
+
+- name: 'Set hostname to {{ to }} if it {{ update_hostname_current.ansible_facts.ansible_fqdn }} still is a default'
+  ansible.builtin.hostname:
+    name: "{{ to }}"
+    use: systemd
+  become: true
+  when: 'update_hostname_current.ansible_facts.ansible_fqdn in ( from is string | ansible.builtin.ternary([ from ], from | d([]))) and update_hostname_current.ansible_facts.ansible_fqdn != to'
+  register: update_hostname_changed
+
+- name: Verify that hostname is {{ to }}
+  ansible.builtin.fail:
+    msg: "stopping! hostname is '{{ update_hostname_current.ansible_facts.ansible_fqdn }}' and neither '{{ to }}' nor {{ from | d('') }}"
+  when: update_hostname_current.ansible_facts.ansible_fqdn != to and not update_hostname_changed.changed
+
