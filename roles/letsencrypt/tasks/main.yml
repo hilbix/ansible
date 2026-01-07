@@ -38,6 +38,7 @@
         ChrootDirectory %h
         ForceCommand internal-sftp -u 022
       Match Group *
+    notify: Restart sshd
 
 # Actually this was my own error historic setup
 # You might remove it this here!
