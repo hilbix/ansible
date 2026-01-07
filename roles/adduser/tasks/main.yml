@@ -1,0 +1,7 @@
+
+- name: Adding user {{ user }}
+  ansible.builtin.user:
+    name: '{{ user }}'
+    home: "{{ path | d('/home/'+user) }}"
+    shell: "{{ shell | d('/bin/bash') }}"
+
