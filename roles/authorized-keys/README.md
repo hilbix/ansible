@@ -14,6 +14,10 @@ Install `~/.ssh/authorized_keys` from files in `files/authorized_keys/` via `ans
 - `files/authorized_keys/{{key}}` source files with lines of ssh-entries
 - not implemented: defaults to current user if `keys` is missing
 
+`shell`
+- string
+- If given this creates the user with the given shell if it not yet exists
+
 Examples:
 
 ```
