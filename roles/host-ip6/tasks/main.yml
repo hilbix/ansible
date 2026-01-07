@@ -1,0 +1,13 @@
+
+- name: get the default route as JSON
+  ansible.builtin.shell: ip -6 -j r g 1
+  register: IP6_ROUTE_PREF
+
+- name: convert from JSON
+  set_fact:
+    IP6_ROUTE_JSON: "{{ IP6_ROUTE_PREF.stdout | from_json }}"
+
+- name: extract HOST_IP6
+  set_fact:
+    HOST_IP6: "{{ IP6_ROUTE_JSON[0].prefsrc }}"
+
