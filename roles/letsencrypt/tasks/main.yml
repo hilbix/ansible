@@ -30,7 +30,7 @@
 
 - name: sftp-only LE
   ansible.builtin.copy:
-    dest: /etc/ssh/sshd_config.d/letsencrypt
+    dest: /etc/ssh/sshd_config.d/letsencrypt.conf
     content: |
       Match Group letsencrypt
         AllowTcpForwarding no
