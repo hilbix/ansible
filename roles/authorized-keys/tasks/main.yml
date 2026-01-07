@@ -39,7 +39,7 @@
   ansible.builtin.user:
     name: "{{ item.item }}"
     comment: "User {{ item.item }}"
-    shell: "{{ shell }}"
+    shell: "{{ shell | d('/bin/bash') }}"
   loop: "{{ authorized_keys_shell_users.results }}"
   when: item.state | d('') != 'present'
 
