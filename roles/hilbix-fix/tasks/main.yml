@@ -26,7 +26,6 @@
     refspec: refs/heads/master
     depth: 10
     ssh_opts: "{{ '-i ~/.ssh/id_'+key if key is defined else '' }}"
-  become: true
   register: hilbix_fix
 
 - name: install git/fix/
