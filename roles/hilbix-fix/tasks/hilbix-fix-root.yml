@@ -23,6 +23,6 @@
 
 - name: run {{ userhome.stdout }}/.apt the first time
   ansible.builtin.shell:
-    cmd: "DEBIAN_FRONTEND=noninteractive '{{ userhome.stdout }}/.apt' >>/tmp/APTRUN 2>&1"
+    cmd: "DEBIAN_FRONTEND=noninteractive '{{ userhome.stdout }}/.apt' </dev/null >>/tmp/APTRUN 2>&1"
   when: hilbix_fix.changed
 
