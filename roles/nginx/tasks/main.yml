@@ -26,4 +26,6 @@
     owner: root
     group: root
   loop: "{{ sites is string | ternary([sites], sites | default([])) | list }}"
+  notify: Restart nginx
+
 
