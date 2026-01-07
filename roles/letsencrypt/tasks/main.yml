@@ -15,18 +15,25 @@
 
 - name: create LE home
   ansible.builtin.file:
-    path: /etc/letsencrypt{{ item }}
+    path: /etc/letsencrypt
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: populate LE home
+  ansible.builtin.file:
+    path: /etc/letsencrypt/{{ item }}
     owner: letsencrypt
     group: letsencrypt
     mode: '0755'
     state: directory
   loop:
-    - ''
-    - /.ssh
-    - /certs
-    - /web
-    - /web/.well-known
-    - /web/.well-known/acme-challenge
+    - .ssh
+    - certs
+    - web
+    - web/.well-known
+    - web/.well-known/acme-challenge
 
 - name: sftp-only LE
   ansible.builtin.copy:
