@@ -13,10 +13,8 @@
 # Hint: ssl_dom can be a list of domains separated by SPC (as NginX needs it)                                                               
 
 server {
-	listen		{{ nginx_letsencrypt_listen | default('80 default_server') }};
-{% if (nginx_letsencrypt_name | default('')) != '' %}
-	server_name	_;
-{% endif %}
+	listen		{{ nginx_letsencrypt_listen | d('[::]:80 ipv6only=off default_server') }};
+	server_name	{{ nginx_letsencrypt_name | d('_') }};
 	server_tokens	off;
 
 	root		/etc/letsencrypt/web;
@@ -28,7 +26,7 @@ server {
 		try_files	$uri =404;
 	}
 
-{% if ssl_cert is defined %}
+{% if ssl_dom is defined %}
 	location / {
 		return	301	https://$host$request_uri;
 	}
