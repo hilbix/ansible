@@ -27,7 +27,7 @@
 #
 # Iteration 2 #
 
-- name: Check users to possibly create
+- name: Check users if they exists if 'shell' variable is set
   ansible.builtin.user:
     name: "{{ item }}"
   check_mode: true
@@ -35,14 +35,11 @@
   when: shell is string
   register: authorized_keys_shell_users
 
-- name: Debug
-  debug:
-    msg: "{{ authorized_keys_shell_users }}"
-
-- name: Create user if 'shell' variable is set
+- name: Create user if missing
   ansible.builtin.user:
     name: "{{ item.item }}"
     comment: "User {{ item.item }}"
+    shell: "{{ shell }}"
   loop: "{{ authorized_keys_shell_users.results }}"
   when: item.state | d('') != 'present'
 
