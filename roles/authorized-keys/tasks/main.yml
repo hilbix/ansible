@@ -35,12 +35,16 @@
   when: shell is string
   register: authorized_keys_shell_users
 
+- name: Debug
+  debug:
+    msg: "{{ authorized_keys_shell_users }}"
+
 - name: Create user if 'shell' variable is set
   ansible.builtin.user:
     name: "{{ item.item }}"
     comment: "User {{ item.item }}"
   loop: "{{ authorized_keys_shell_users.results }}"
-  when: "{{ item.state | d('') == 'absent' }}"
+  when: item.state | d('') != 'present'
 
 - name: Update authorized_keys from keys
   ansible.posix.authorized_key:
