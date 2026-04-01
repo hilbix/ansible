@@ -22,7 +22,7 @@
     repo: https://github.com/hilbix/fix.git
     dest: '{{ userhome.stdout }}/git/fix'
     accept_hostkey: yes
-    version: 4333a1f123f436ff951901fafa06d83bd901e95b
+    version: be03e9aacd162f0ac06e1ab2d2f0052625ed118e
     refspec: refs/heads/master
     depth: 10
     ssh_opts: "{{ '-i ~/.ssh/id_'+key if key is defined else '' }}"
