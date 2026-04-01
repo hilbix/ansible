@@ -1,4 +1,7 @@
 
+- ansible.builtin.import_role:
+    name: handlers
+
 - name: create /etc/network/interfaces.d/{{ dev }}
   ansible.builtin.template:
     src: interface-template.txt
