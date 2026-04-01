@@ -7,12 +7,13 @@
     group: root
     mode: "0644"
   when: apt_proxy is defined
+  register: hilbix_fix_proxy
 
 - name: update everything
   ansible.builtin.apt:
     update_cache: yes
     upgrade: dist
-  when: hilbix_fix.changed
+  when: hilbix_fix.changed or hilbix_fix_proxy.changed
 
 - name: Install debian-security-support
   ansible.builtin.apt:
@@ -23,6 +24,6 @@
 
 - name: run {{ userhome.stdout }}/.apt the first time
   ansible.builtin.shell:
-    cmd: "DEBIAN_FRONTEND=noninteractive '{{ userhome.stdout }}/.apt' >>/tmp/APTRUN 2>&1"
-  when: hilbix_fix.changed
+    cmd: "DEBIAN_FRONTEND=noninteractive '{{ userhome.stdout }}/.apt' >>/tmp/APTRUN 2>&1 </dev/null"
+  when: hilbix_fix.changed or hilbix_fix_proxy.changed
 
