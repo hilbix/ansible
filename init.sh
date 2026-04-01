@@ -40,7 +40,7 @@ SSH()
 ov st git status --porcelain
 [ -z "$st" ] || STDERR "$st" || OOPS git status not clean
 
-o play init/wait.yml
+#o play init/wait.yml
 
 # Transfer our SSH credentials
 o ssh-copy-id "$DEST"
